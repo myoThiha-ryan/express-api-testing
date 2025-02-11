@@ -36,7 +36,6 @@ app.get("/api/user", (req, res) => {
 
 app.get("/api/user/:id", (req, res) => {
   const { id } = req.params;
-  console.log(id);
   const parsedId = parseInt(id);
   console.log(parsedId);
   if (isNaN(parsedId)) {
@@ -53,7 +52,6 @@ app.get("/api/user/:id", (req, res) => {
 
 app.post("/api/user", (req, res) => {
   const { body } = req;
-  console.log(body);
   const newUser = { id: users[users.length - 1].id + 1, ...body };
   users.push(newUser);
   res.status(201).send(newUser);
@@ -75,6 +73,25 @@ app.put("/api/user/:id", (req, res) => {
     return res.sendStatus(404);
   }
   users[userIndex] = { id: parsedId, ...body };
+  res.sendStatus(204);
+});
+
+// PATCH request
+
+app.patch("/api/user/:id", (req, res) => {
+  const {
+    body,
+    params: { id },
+  } = req;
+  const parsedId = parseInt(id);
+  if (isNaN(parsedId)) {
+    return res.sendStatus(404);
+  }
+  const userIndex = users.findIndex((user) => user.id === parsedId);
+  if (userIndex === -1) {
+    return res.sendStatus(404);
+  }
+  users[userIndex] = { ...users[userIndex], ...body }; // way of updating with PATCH request
   res.sendStatus(204);
 });
 
