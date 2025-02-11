@@ -1,6 +1,8 @@
 import express from "express";
 
 const app = express();
+app.use(express.json());
+
 const PORT = process.env.PORT || 4000;
 
 const users = [
@@ -45,6 +47,16 @@ app.get("/user/:id", (req, res) => {
     res.status(404).send({ msg: "there is no user with this Id" });
   }
   res.send(requestedUser);
+});
+
+// Post Request
+
+app.post("/user", (req, res) => {
+  const { body } = req;
+  console.log(body);
+  const newUser = { id: users[users.length - 1].id + 1, ...body };
+  users.push(newUser);
+  res.status(201).send(newUser);
 });
 
 app.listen(PORT, () => {
