@@ -95,6 +95,24 @@ app.patch("/api/user/:id", (req, res) => {
   res.sendStatus(204);
 });
 
+// DElETE request
+
+app.delete("/api/user/:id", (req, res) => {
+  const {
+    params: { id },
+  } = req;
+  const parsedId = parseInt(id);
+  if (isNaN(parsedId)) {
+    return res.sendStatus(400);
+  }
+  const userIndex = users.findIndex((user) => user.id === parsedId);
+  if (userIndex === -1) {
+    return res.sendStatus(404);
+  }
+  users.splice(userIndex, 1);
+  res.sendStatus(200);
+});
+
 app.listen(PORT, () => {
   console.log(`Server started listening on ${PORT}`);
 });
